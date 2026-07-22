@@ -11,9 +11,9 @@ macOS · JXA + Automator · 无需编译、无需开发者账号 / no build tool
 
 ### 痛点
 
-用 Obsidian 管理多个库（vault）时，日常有两处摩擦每天要撞上几十次：
+用 Obsidian 管理多个库（vault）时，日常有两处反复出现的摩擦：
 
-1. **打不开。** 在 Finder 里看到库里的某个 `.md`，想直接用它，却只能：打开 Obsidian → 进入"切换库"界面 → 找到那个库 → 再逐层点进文件夹找到文件。双击文件本身要么被别的编辑器接管，要么根本进不了 Obsidian。文件就在眼前，却隔着五六步操作。
+1. **打不开。** 在 Finder 里看到库里的某个 `.md`，想直接用它，却只能：打开 Obsidian → 进入"切换库"界面 → 找到那个库 → 再逐层点进文件夹找到文件。双击文件本身要么被别的编辑器接管，要么根本进不了 Obsidian。文件就在眼前，却要绕上好几步。
 2. **看不清。** 选中 `.md` 按空格预览，出来的是**原始 Markdown 源码**——满屏的 `#`、`**`、`|`，而不是渲染后的标题、加粗、表格。快速扫一眼内容都费劲。
 
 多设备用户还有第三处坑：**iCloud 库跨设备"隐身"。** 在手机 / iPad 上新建的 iCloud 库，Mac 双击其中的文件会被误导向别的编辑器——因为 Obsidian 的库注册表是**每台设备各自本地、不随 iCloud 同步**的。
@@ -32,7 +32,7 @@ macOS · JXA + Automator · 无需编译、无需开发者账号 / no build tool
 
 ### 为什么值得
 
-把 Obsidian 库真正**融进 macOS 的原生文件工作流**：`.md` 文件回归"像普通文件一样双击即用"，无论它在 Finder 里，还是某个搜索结果里。省掉的不是一次两次点击，而是每天几十次"开 app → 找库 → 找文件"的累积摩擦；对 Mac + iPhone/iPad 多端同步的人尤其关键。
+把 Obsidian 库真正**融进 macOS 的原生文件工作流**：`.md` 文件回归"像普通文件一样双击即用"，无论它在 Finder 里，还是某个搜索结果里。省掉的是每次打开库内文件都要重复的"开 app → 找库 → 找文件"绕行；对 Mac + iPhone/iPad 多端同步的人尤其关键。
 
 ### 安装
 
@@ -79,7 +79,7 @@ open -a QLMarkdown            # 打开一次以注册扩展
 
 ### The problem
 
-Managing several Obsidian vaults, two frictions hit you dozens of times a day:
+Managing several Obsidian vaults, two frictions keep coming up:
 
 1. **Can't open it.** You see a `.md` inside a vault in Finder, but to actually use it you must launch Obsidian → open the *switch vault* screen → find the vault → drill down to the file. Double-clicking the file either gets hijacked by another editor or never reaches Obsidian at all.
 2. **Can't read it.** Hit Space to Quick Look a `.md` and you get **raw Markdown source** — `#`, `**`, `|` everywhere — instead of rendered headings, bold, and tables.
@@ -100,7 +100,7 @@ For rendered previews, use the excellent open-source [QLMarkdown](https://github
 
 ### Why it matters
 
-It folds Obsidian vaults into the **native macOS file workflow**: `.md` files behave like any other file you can just double-click — whether in Finder or a search result. What you save isn't one click but the daily, cumulative "launch app → find vault → find file" tax — and for Mac + iPhone/iPad users it removes a real dead end.
+It folds Obsidian vaults into the **native macOS file workflow**: `.md` files behave like any other file you can just double-click — whether in Finder or a search result. What you save is the "launch app → find vault → find file" detour every time you open a note — and for Mac + iPhone/iPad users it removes a real dead end.
 
 ### Install
 
