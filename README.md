@@ -1,38 +1,38 @@
 # Obsidian Quick Open
 
-> 从 Finder 双击 Markdown 文件，直达对应的 Obsidian 库；空格预览也能渲染成排版。
-> Double-click a Markdown file in Finder to open it in the *right* Obsidian vault — and get a rendered Quick Look preview instead of raw `##`/`**`.
+在 Finder 中双击 Markdown 文件，即可在其所属的 Obsidian 库中打开；空格预览也渲染为排版后的样式。
+Double-click a Markdown file in Finder to open it in its Obsidian vault, with a rendered Quick Look preview.
 
-macOS · JXA + Automator · 无需编译、无需开发者账号 / no build toolchain, no developer account
+**平台** macOS 11+ · **实现** JXA / Automator / LaunchServices · **依赖** Obsidian（预览渲染另需 QLMarkdown）
 
 ---
 
 ## 中文
 
-### 痛点
+### 解决的问题
 
-用 Obsidian 管理多个库（vault）时，日常有两处反复出现的摩擦：
+使用 Obsidian 管理多个库（vault）时，存在两处反复出现的摩擦：
 
-1. **打不开。** 在 Finder 里看到库里的某个 `.md`，想直接用它，却只能：打开 Obsidian → 进入"切换库"界面 → 找到那个库 → 再逐层点进文件夹找到文件。双击文件本身要么被别的编辑器接管，要么根本进不了 Obsidian。文件就在眼前，却要绕上好几步。
-2. **看不清。** 选中 `.md` 按空格预览，出来的是**原始 Markdown 源码**——满屏的 `#`、`**`、`|`，而不是渲染后的标题、加粗、表格。快速扫一眼内容都费劲。
+1. **无法直接打开。** 在 Finder 中看到某个库内的 `.md` 文件，却无法直接使用：需要先启动 Obsidian，进入"切换库"界面，选择对应的库，再逐层进入文件夹定位该文件。若直接双击文件，则会被其他编辑器接管，无法进入 Obsidian。
+2. **预览不可读。** 选中 `.md` 文件按空格预览，显示的是 Markdown 源码（`#`、`**`、`|` 等符号），而非渲染后的标题、加粗与表格。
 
-多设备用户还有第三处坑：**iCloud 库跨设备"隐身"。** 在手机 / iPad 上新建的 iCloud 库，Mac 双击其中的文件会被误导向别的编辑器——因为 Obsidian 的库注册表是**每台设备各自本地、不随 iCloud 同步**的。
+对于多设备用户，还存在第三处问题：**iCloud 库跨设备不可见。** 在 iPhone 或 iPad 上创建的 iCloud 库，其笔记在 Mac 上会被导向错误的程序——因为 Obsidian 的库注册表（`obsidian.json`）由各设备独立维护，不经 iCloud 同步。
 
-### 对策
+### 解决方案
 
-一套三件小工具，全部基于 macOS 原生机制（`obsidian://` URL scheme、LaunchServices、Automator、Quick Look 扩展），不修改 Obsidian 本体：
+三个基于 macOS 原生机制（`obsidian://` URL scheme、LaunchServices、Automator、Quick Look 扩展）的组件，均不修改 Obsidian 本体：
 
-| 工具 | 解决 |
+| 组件 | 功能 |
 |------|------|
-| **智能打开器**（`Obsidian Opener.app`） | 双击库内 `.md` → 自动在**对应库**里用 Obsidian 打开；库外 `.md` → 回退到你指定的编辑器（默认 Typora）。库列表**动态读取**，新建库零维护。 |
-| **右键快捷操作**（"Open in Obsidian"） | 右键任意文件夹 → 作为整个库在 Obsidian 打开。 |
-| **库注册脚本**（`register-vaults.sh`） | 一键把"是库但 Mac 没注册"的 iCloud / 本地文件夹补登记，解决跨设备隐身。 |
+| 智能打开器 `Obsidian Opener.app` | 双击库内的 `.md` / `.canvas` / `.base`，在其所属库中打开；库外的 `.md` 交由指定编辑器（默认 Typora）。库列表在每次运行时实时读取，新建库无需额外配置。 |
+| 右键操作 “Open in Obsidian” | 右键任意文件夹，将其作为完整的库打开。 |
+| 库注册脚本 `register-vaults.sh` | 一键登记“本身是库、但当前 Mac 尚未注册”的 iCloud 或本地文件夹，解决跨设备不可见问题。 |
 
-空格预览的渲染，用成熟的开源 [QLMarkdown](https://github.com/sbarex/QLMarkdown) Quick Look 扩展即可（见下方"可选：渲染预览"）。
+空格预览的渲染由开源的 [QLMarkdown](https://github.com/sbarex/QLMarkdown) Quick Look 扩展提供（见“预览渲染”）。
 
-### 为什么值得
+### 价值
 
-把 Obsidian 库真正**融进 macOS 的原生文件工作流**：`.md` 文件回归"像普通文件一样双击即用"，无论它在 Finder 里，还是某个搜索结果里。省掉的是每次打开库内文件都要重复的"开 app → 找库 → 找文件"绕行；对 Mac + iPhone/iPad 多端同步的人尤其关键。
+该工具将 Obsidian 库纳入 macOS 的原生文件工作流：无论在 Finder 还是搜索结果中，`.md` 文件都可像普通文件一样双击使用，省去每次打开库内文件时“启动程序 → 选择库 → 定位文件”的重复步骤。对于在 Mac 与 iPhone / iPad 之间同步的用户，这一改善尤为明显。
 
 ### 安装
 
@@ -42,67 +42,67 @@ cd obsidian-quick-open
 zsh install.sh
 ```
 
-`install.sh` 会：构建打开器 app → 设为 `.md` 默认程序（自动用 Homebrew 装 [`duti`](https://github.com/moretension/duti)，没有则给出手动步骤）→ 安装右键快捷操作。可重复运行。
+`install.sh` 依次完成：构建打开器；将其设为 `.md` 的默认程序（自动经 Homebrew 安装 [`duti`](https://github.com/moretension/duti)，若不可用则给出手动步骤）；安装右键操作。脚本可重复运行。
 
-**前置条件**：macOS 11+、已安装 Obsidian。回退编辑器默认 Typora（可改，见下）。
+**前置条件：** macOS 11 或更高版本，已安装 Obsidian。默认回退编辑器为 Typora（可修改，见“自定义与卸载”）。
 
 ### 使用
 
-- **双击**任意库内的 `.md` / `.canvas` / `.base` → 在对应库中打开。
-- **库外的 `.md`** → 用回退编辑器打开（不打扰非笔记类 Markdown，如代码仓库的 README）。
-- **右键文件夹** → 服务 / 快速操作 → **Open in Obsidian** → 作为整库打开。
-- **手机上新建的 iCloud 库双击进错程序？** 运行一次 `zsh register-vaults.sh` 补登记。
+- **双击**库内的 `.md` / `.canvas` / `.base`：在其所属库中打开。
+- **库外的 `.md`**：由回退编辑器打开，不干扰代码仓库 README 等非笔记类文件。
+- **右键文件夹** → 服务 / 快速操作 → **Open in Obsidian**：作为完整的库打开。
+- **在手机上新建的 iCloud 库被导向了错误程序：** 运行一次 `zsh register-vaults.sh` 完成登记。
 
-> 首次在 Mac 打开一个新 iCloud 库时，Obsidian 可能弹一次"信任作者 / 启用社区插件"确认，点一下即可，只弹一次。
+首次在 Mac 上打开某个新的 iCloud 库时，Obsidian 可能弹出一次“信任作者 / 启用社区插件”的确认，确认即可，仅出现一次。
 
-### 可选：让空格预览渲染
+### 预览渲染（可选）
 
 ```bash
 brew install --cask qlmarkdown
-open -a QLMarkdown            # 打开一次以注册扩展
+open -a QLMarkdown        # 首次启动以注册扩展
 ```
 
-然后到 **系统设置 → 通用 → 登录项与扩展 → 快速查看**，勾选 QLMarkdown。此后按空格预览 `.md` 即为渲染排版。QLMarkdown 支持自定义 CSS，可把预览调得接近你的 Obsidian 主题。
+随后在**系统设置 → 通用 → 登录项与扩展 → 快速查看**中启用 QLMarkdown。此后 `.md` 的空格预览即为渲染后的排版。QLMarkdown 支持自定义 CSS，可将预览样式调整至接近所用的 Obsidian 主题。
 
-### 自定义 / 卸载
+### 自定义与卸载
 
-- **换回退编辑器**：编辑 `src/opener.js` 顶部的 `FALLBACK_APP`（如改成 `'Visual Studio Code'`），重跑 `zsh install.sh`。
-- **卸载**：`zsh uninstall.sh`（移除 app、默认程序绑定与右键操作；`register-vaults.sh` 注册过的库仍保留在 Obsidian，可自行在库列表移除）。
+- **更换回退编辑器：** 修改 `src/opener.js` 顶部的 `FALLBACK_APP`，重新运行 `zsh install.sh`。
+- **卸载：** 运行 `zsh uninstall.sh`，移除打开器、默认程序绑定与右键操作。经 `register-vaults.sh` 登记的库仍保留在 Obsidian 中，可自行在库列表移除。
 
 ### 工作原理
 
-打开器是用 `osacompile` 编译的微型 JXA app。收到文件时：读取 `~/Library/Application Support/obsidian/obsidian.json` 拿到所有库路径，按长度降序做**最长前缀匹配**（保证像 `~/Documents` 这种大范围库不会抢走更深库里的文件）；命中就调用 `obsidian://open?path=<URL 编码的绝对路径>`（正确处理中文、空格、括号），否则回退到 `open -a <编辑器>`。出错只发通知，绝不裸 `open`（默认程序是它自己，否则会死循环）。
+打开器是以 `osacompile` 编译的轻量 JXA 应用。接收到文件后，读取 `~/Library/Application Support/obsidian/obsidian.json` 获取全部库路径，按长度降序进行最长前缀匹配（确保 `~/Documents` 等大范围库不会截获更深层库中的文件）；匹配成功则调用 `obsidian://open?path=<URL 编码的绝对路径>`（正确处理中文、空格与括号），否则交由 `open -a <编辑器>`。出错时仅发送通知，而不执行裸 `open`——因其自身即为默认程序，否则会陷入循环调用。
 
 ---
 
 ## English
 
-### The problem
+### Problem
 
-Managing several Obsidian vaults, two frictions keep coming up:
+Managing multiple Obsidian vaults involves two recurring frictions:
 
-1. **Can't open it.** You see a `.md` inside a vault in Finder, but to actually use it you must launch Obsidian → open the *switch vault* screen → find the vault → drill down to the file. Double-clicking the file either gets hijacked by another editor or never reaches Obsidian at all.
-2. **Can't read it.** Hit Space to Quick Look a `.md` and you get **raw Markdown source** — `#`, `**`, `|` everywhere — instead of rendered headings, bold, and tables.
+1. **No direct open.** When you find a `.md` file inside a vault in Finder, you cannot use it directly: you must launch Obsidian, open the *switch vault* screen, select the vault, and navigate to the file. Double-clicking the file instead hands it to another editor and never reaches Obsidian.
+2. **Unreadable preview.** Pressing Space to preview a `.md` shows Markdown source (`#`, `**`, `|`) rather than rendered headings, bold text, and tables.
 
-Multi-device users hit a third trap: **iCloud vaults are "invisible" across devices.** A vault created on your iPhone/iPad lives in iCloud, but this Mac routes its files to the wrong app — because Obsidian's vault registry is **per-device and not synced by iCloud**.
+Multi-device users face a third issue: **iCloud vaults are invisible across devices.** A vault created on an iPhone or iPad is routed to the wrong app on the Mac, because Obsidian's vault registry (`obsidian.json`) is maintained per device and is not synced through iCloud.
 
-### The fix
+### Solution
 
-Three small tools, all built on native macOS mechanisms (`obsidian://` URL scheme, LaunchServices, Automator, Quick Look extensions). Nothing about Obsidian itself is modified:
+Three components built on native macOS mechanisms (`obsidian://` URL scheme, LaunchServices, Automator, Quick Look extensions), none of which modify Obsidian itself:
 
-| Tool | What it does |
-|------|--------------|
-| **Smart opener** (`Obsidian Opener.app`) | Double-click a `.md` in a vault → opens in Obsidian in the **correct vault**; a `.md` outside any vault → opens in your fallback editor (default Typora). The vault list is read **live**, so new vaults need zero maintenance. |
-| **Right-click action** ("Open in Obsidian") | Right-click any folder → open it as a whole vault. |
-| **Vault registrar** (`register-vaults.sh`) | One command to register any "is-a-vault-but-unregistered" iCloud/local folder, fixing the cross-device invisibility. |
+| Component | Function |
+|-----------|----------|
+| Smart opener `Obsidian Opener.app` | Opens a `.md` / `.canvas` / `.base` inside a vault in its owning vault; a `.md` outside any vault goes to a designated editor (Typora by default). The vault list is read live, so new vaults need no configuration. |
+| Right-click action “Open in Obsidian” | Opens any folder as a complete vault. |
+| Vault registrar `register-vaults.sh` | Registers, in one command, any iCloud or local folder that is a vault but is not yet known to this Mac, resolving the cross-device visibility issue. |
 
-For rendered previews, use the excellent open-source [QLMarkdown](https://github.com/sbarex/QLMarkdown) Quick Look extension (see *Optional: rendered previews*).
+Rendered previews are provided by the open-source [QLMarkdown](https://github.com/sbarex/QLMarkdown) Quick Look extension (see *Rendered Preview*).
 
-### Why it matters
+### Value
 
-It folds Obsidian vaults into the **native macOS file workflow**: `.md` files behave like any other file you can just double-click — whether in Finder or a search result. What you save is the "launch app → find vault → find file" detour every time you open a note — and for Mac + iPhone/iPad users it removes a real dead end.
+The tool brings Obsidian vaults into the native macOS file workflow: whether in Finder or a search result, `.md` files can be double-clicked like any other file, removing the repeated “launch app → select vault → locate file” steps required each time you open a note. The improvement is most pronounced for users syncing across a Mac and an iPhone or iPad.
 
-### Install
+### Installation
 
 ```bash
 git clone https://github.com/Shaowen-Ye/obsidian-quick-open.git
@@ -110,32 +110,36 @@ cd obsidian-quick-open
 zsh install.sh
 ```
 
-`install.sh` builds the opener app, sets it as the default `.md` handler (auto-installs [`duti`](https://github.com/moretension/duti) via Homebrew, or prints manual steps), and installs the right-click action. Re-runnable. **Requires** macOS 11+ and Obsidian.
+`install.sh` builds the opener, sets it as the default handler for `.md` (installing [`duti`](https://github.com/moretension/duti) via Homebrew, or printing manual steps if unavailable), and installs the right-click action. The script is idempotent.
+
+**Requirements:** macOS 11 or later, with Obsidian installed. The default fallback editor is Typora (configurable; see *Customization & Uninstall*).
 
 ### Usage
 
-- **Double-click** any `.md` / `.canvas` / `.base` in a vault → opens in the right vault.
-- **A `.md` outside any vault** → opens in the fallback editor (won't disturb non-note Markdown like a repo README).
-- **Right-click a folder** → Services / Quick Actions → **Open in Obsidian**.
-- **A vault made on your phone opens in the wrong app?** Run `zsh register-vaults.sh` once.
+- **Double-click** a `.md` / `.canvas` / `.base` inside a vault to open it in the owning vault.
+- **A `.md` outside any vault** opens in the fallback editor, leaving non-note files such as repository READMEs undisturbed.
+- **Right-click a folder** → Services / Quick Actions → **Open in Obsidian** to open it as a complete vault.
+- **A vault created on your phone is routed to the wrong app:** run `zsh register-vaults.sh` once.
 
-### Optional: rendered previews
+The first time you open a new iCloud vault on the Mac, Obsidian may show a one-time “trust author / enable community plugins” prompt.
+
+### Rendered Preview (Optional)
 
 ```bash
 brew install --cask qlmarkdown
-open -a QLMarkdown            # launch once to register the extension
+open -a QLMarkdown        # launch once to register the extension
 ```
 
-Then enable QLMarkdown under **System Settings → General → Login Items & Extensions → Quick Look**. QLMarkdown supports custom CSS, so you can style previews close to your Obsidian theme.
+Then enable QLMarkdown under **System Settings → General → Login Items & Extensions → Quick Look**. QLMarkdown supports custom CSS, letting you match the preview to your Obsidian theme.
 
-### Customize / uninstall
+### Customization & Uninstall
 
-- **Change the fallback editor**: edit `FALLBACK_APP` at the top of `src/opener.js`, then re-run `zsh install.sh`.
-- **Uninstall**: `zsh uninstall.sh`.
+- **Change the fallback editor:** edit `FALLBACK_APP` at the top of `src/opener.js`, then re-run `zsh install.sh`.
+- **Uninstall:** run `zsh uninstall.sh` to remove the opener, its default-handler bindings, and the right-click action. Vaults registered by `register-vaults.sh` remain in Obsidian and can be removed from the vault list manually.
 
-### How it works
+### How It Works
 
-The opener is a tiny JXA app compiled with `osacompile`. On receiving a file it reads Obsidian's `obsidian.json`, does a **longest-prefix match** against all vault paths (so a broad vault like `~/Documents` never steals files that belong to a deeper vault), and either calls `obsidian://open?path=<url-encoded absolute path>` or falls back to `open -a <editor>`. On error it only posts a notification — never a bare `open`, which would loop back into itself.
+The opener is a lightweight JXA application compiled with `osacompile`. On receiving a file, it reads all vault paths from `~/Library/Application Support/obsidian/obsidian.json` and performs a longest-prefix match in descending order of path length, so a broad vault such as `~/Documents` never captures files belonging to a deeper vault. On a match it calls `obsidian://open?path=<url-encoded absolute path>`; otherwise it defers to `open -a <editor>`. On error it posts a notification only, never a bare `open`, which would loop back into itself as the default handler.
 
 ---
 
