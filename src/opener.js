@@ -1,4 +1,4 @@
-// Obsidian Opener — a smart Markdown opener for Finder / QSpace Pro on macOS.
+// Obsidian Opener — a smart Markdown opener for Finder on macOS.
 //
 //   * A file inside a *registered* Obsidian vault  → opens in Obsidian, in the
 //     correct vault, via the `obsidian://open?path=` URL scheme.
